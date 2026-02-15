@@ -1,0 +1,7 @@
+DBIR 2025 - subset (for detector ideation)
+
+- Credential abuse remains a top initial access vector (stolen credentials, account takeover patterns).
+- Exploitation of vulnerabilities has increased as an initial access method (notably around ~20% in findings).
+- System Intrusion pattern is prominent; ransomware is highly prevalent within this pattern (commonly cited ~75%).
+- Social engineering remains common: phishing and pretexting; MFA fatigue / “prompt bombing” is a notable technique.
+- Third-party involvement in breaches is significant and has increased (supply chain / vendor access).

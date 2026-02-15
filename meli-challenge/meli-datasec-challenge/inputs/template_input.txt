@@ -1,0 +1,47 @@
+# UEBA / Security Detection Input Template (v1)
+
+## A) Context
+- Industry:
+- Regions:
+- Primary environment: (cloud / on-prem / hybrid)
+- Cloud: (AWS / Azure / GCP / none)
+
+## B) Identity & Auth
+- Primary IdP: (Azure AD / Okta / AD / other)
+- MFA: (yes/no/partial) + where:
+- SSO: (yes/no) + for which apps:
+- Admin roles/groups:
+- Service accounts exist: (yes/no) + where used:
+
+## C) Internal Apps (top 3-6)
+For each app:
+- Name:
+- Type: (web / api / mobile / internal tool / batch)
+- Auth: (SSO / local / service account)
+- Roles:
+- Sensitive data touched: (PII / PCI / secrets / source code / none)
+- Access path: (internet / vpn / internal only)
+- Logs available: (auth / audit / app / none)
+
+## D) Sensitive Data
+- Data types:
+- Where stored:
+- Who can access:
+- Common “mass export” paths (if any):
+
+## E) Telemetry Available (mark Yes/No/Partial)
+- IdP sign-in logs:
+- Endpoint/EDR process telemetry:
+- Cloud audit logs:
+- DNS:
+- Proxy:
+- Firewall:
+- App audit logs:
+- DB audit logs:
+- Email logs:
+- CI/CD logs:
+
+## F) Top Risks / Incident history
+- Past incidents (12 months):
+- Top 3 feared scenarios:
+- Tolerance for false positives: (low/medium/high)
