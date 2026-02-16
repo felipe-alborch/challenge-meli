@@ -14,65 +14,69 @@ MITRE_ID_MAP = {
 
 
 def _risk_level_from_score(score: int) -> str:
-    # Simple thresholds
     if score >= 200:
         return "High"
     if score >= 120:
-        return "Med"
+        return "Medium"
     return "Low"
 
 
 def _score_from_category(category: str, telemetry: Dict[str, bool]) -> Dict[str, Any]:
-    """
-    Implements the scoring table we agreed:
-    risk_score = impact * likelihood * 10
-    """
-    # Defaults
-    impact = 3
-    likelihood = 3
+    # Base por categoría (criterio de negocio/amenaza)
+    # Ajustado para que haya priorización.
+    base = {
+        "RANSOMWARE":      (5, 5),  
+        "ATO":             (5, 5),  
+        "EXFIL":           (5, 4),
+        "EXPLOIT_PRIVESC": (5, 4),
+        "THIRD_PARTY":     (4, 3), 
+    }
 
-    if category == "ATO":
-        impact = 5
-        likelihood = 5 if telemetry.get("idp") else 4
+    impact, likelihood = base.get(category, (3, 3))
+
+    bonus = 0
+    if category == "ATO" and telemetry.get("idp"):
+        bonus = 0 
+    elif category == "RANSOMWARE" and telemetry.get("edr"):
+        bonus = 0
+    elif category == "EXFIL" and (telemetry.get("proxy") or telemetry.get("db")):
+        bonus = 1
+    elif category == "EXPLOIT_PRIVESC" and telemetry.get("cloud"):
+        bonus = 1
+    elif category == "THIRD_PARTY" and telemetry.get("idp"):
+        bonus = 1
+
+    likelihood = min(5, likelihood + bonus)
+
+    if category == "RANSOMWARE":
         risk_rationale = (
-            "High impact (account takeover enables broad access and can lead to escalation) and high likelihood "
-            "given credential abuse prevalence; visibility improves with IdP telemetry."
+            "Critical availability impact aligned with DBIR system intrusion patterns. "
+            "Ransomware remains one of the most disruptive and prevalent attack outcomes."
         )
-
-    elif category == "EXPLOIT_PRIVESC":
-        impact = 5
-        likelihood = 5 if telemetry.get("cloud") else 4
+    elif category == "ATO":
         risk_rationale = (
-            "High impact (privileged access can compromise the environment) and increasing likelihood as exploitation "
-            "is a common initial access vector; cloud audit telemetry improves detection confidence."
+            "High-impact credential abuse scenario aligned with DBIR credential-based breaches. "
+            "MFA fatigue and valid account misuse remain highly prevalent initial access vectors."
         )
-
-    elif category == "RANSOMWARE":
-        impact = 5
-        likelihood = 5 if telemetry.get("edr") else 4
-        risk_rationale = (
-            "Very high impact due to business disruption and potential data loss/extortion; likelihood increases "
-            "when EDR telemetry enables early behavioral signals."
-        )
-
     elif category == "EXFIL":
-        impact = 5
-        likelihood = 5 if (telemetry.get("proxy") or telemetry.get("db")) else 4
         risk_rationale = (
-            "High impact due to potential sensitive data leakage and regulatory exposure; likelihood increases when "
-            "network/database telemetry enables correlation between export activity and outbound traffic."
+            "High data exposure impact aligned with DBIR data breach outcomes. "
+            "Exfiltration following abnormal export activity represents elevated business risk."
         )
-
+    elif category == "EXPLOIT_PRIVESC":
+        risk_rationale = (
+            "Privilege escalation following vulnerability exploitation reflects DBIR system intrusion trends. "
+            "Administrative access compromise significantly increases blast radius."
+        )
     elif category == "THIRD_PARTY":
-        impact = 4
-        likelihood = 4 if telemetry.get("idp") else 3
         risk_rationale = (
-            "Moderate-to-high impact depending on accessed systems; likelihood increases with identity visibility "
-            "into vendor behavior and access patterns."
+            "Third-party access abuse reflects DBIR supply chain and partner risk trends. "
+            "Impact depends on privilege scope and monitoring maturity."
         )
-
     else:
-        risk_rationale = "Default scoring applied due to unknown category."
+        risk_rationale = (
+            "Default scoring applied due to unknown category."
+        )
 
     risk_score = impact * likelihood * 10
     risk_level = _risk_level_from_score(risk_score)

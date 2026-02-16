@@ -1,10 +1,10 @@
 {
-  "timestamp_utc": "2026-02-16T18:47:35.493709+00:00",
-  "session_id": "1cca5bd59e47463a80c383f4a46c2a08",
+  "timestamp_utc": "2026-02-16T19:00:40.889642+00:00",
+  "session_id": "1e1b57a826f04a0e8f66b567b385778e",
   "agent": "classifier",
   "payload": {
     "message": "classifier ok",
-    "session_id_seen": "1cca5bd59e47463a80c383f4a46c2a08",
+    "session_id_seen": "1e1b57a826f04a0e8f66b567b385778e",
     "classified_detectors": [
       {
         "name": "Suspicious sign-in chain (new geo/device + MFA fatigue + success)",
@@ -19,7 +19,7 @@
         "likelihood": 5,
         "risk_score": 250,
         "risk_level": "High",
-        "risk_rationale": "High impact (account takeover enables broad access and can lead to escalation) and high likelihood given credential abuse prevalence; visibility improves with IdP telemetry."
+        "risk_rationale": "Alto impacto por abuso de cuentas válidas; muy probable por credential abuse y MFA fatigue."
       },
       {
         "name": "Potential vulnerability exploitation leading to privileged session",
@@ -38,7 +38,7 @@
         "likelihood": 5,
         "risk_score": 250,
         "risk_level": "High",
-        "risk_rationale": "High impact (privileged access can compromise the environment) and increasing likelihood as exploitation is a common initial access vector; cloud audit telemetry improves detection confidence."
+        "risk_rationale": "Alto impacto por escalamiento/acciones admin; probabilidad alta cuando hay exposición de superficie y cambios privilegiados."
       },
       {
         "name": "Ransomware early behavior (mass file ops + recovery tampering)",
@@ -57,7 +57,7 @@
         "likelihood": 5,
         "risk_score": 250,
         "risk_level": "High",
-        "risk_rationale": "Very high impact due to business disruption and potential data loss/extortion; likelihood increases when EDR telemetry enables early behavioral signals."
+        "risk_rationale": "Impacto crítico por interrupción del negocio + extorsión; alta prevalencia en intrusiones."
       },
       {
         "name": "Mass data export + unusual egress destination",
@@ -76,7 +76,7 @@
         "likelihood": 5,
         "risk_score": 250,
         "risk_level": "High",
-        "risk_rationale": "High impact due to potential sensitive data leakage and regulatory exposure; likelihood increases when network/database telemetry enables correlation between export activity and outbound traffic."
+        "risk_rationale": "Alto impacto por fuga de datos y exposición regulatoria; probabilidad alta si hay señales de export + egress."
       },
       {
         "name": "Third-party access anomaly (vendor account deviates from normal patterns)",
@@ -94,8 +94,8 @@
         "impact": 4,
         "likelihood": 4,
         "risk_score": 160,
-        "risk_level": "Med",
-        "risk_rationale": "Moderate-to-high impact depending on accessed systems; likelihood increases with identity visibility into vendor behavior and access patterns."
+        "risk_level": "Medium",
+        "risk_rationale": "Riesgo relevante por accesos de terceros; probabilidad media y depende de controles/visibilidad."
       }
     ]
   }

@@ -29,7 +29,6 @@ def run(
     classified_by_name = _index_by_name(classified)
     detectors_by_name = _index_by_name(detectors)
 
-    # Prefer ordering by classifier score (already sorted)
     ordered_names = [c.get("name") for c in classified if c.get("name")]
     ordered_detectors = [detectors_by_name[n] for n in ordered_names if n in detectors_by_name]
 

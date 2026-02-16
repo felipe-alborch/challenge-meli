@@ -1,6 +1,6 @@
 # UEBA Detection Proposal
 
-**Session ID:** `1cca5bd59e47463a80c383f4a46c2a08`
+**Session ID:** `1e1b57a826f04a0e8f66b567b385778e`
 
 ## Summary
 
@@ -17,7 +17,7 @@ This report summarizes detection proposals (Analyzer) and their enrichment (Clas
 **Risk Score:** 250 (Impact 5/5 × Likelihood 5/5)
 
 **Risk Rationale:**
-High impact (account takeover enables broad access and can lead to escalation) and high likelihood given credential abuse prevalence; visibility improves with IdP telemetry.
+Alto impacto por abuso de cuentas válidas; muy probable por credential abuse y MFA fatigue.
 
 **MITRE ATT&CK Mapping:**
 - T1078 — Valid Accounts
@@ -50,7 +50,7 @@ Aligned with DBIR themes: credential abuse + MFA fatigue. Telemetry check: IdP l
 **Risk Score:** 250 (Impact 5/5 × Likelihood 5/5)
 
 **Risk Rationale:**
-High impact (privileged access can compromise the environment) and increasing likelihood as exploitation is a common initial access vector; cloud audit telemetry improves detection confidence.
+Alto impacto por escalamiento/acciones admin; probabilidad alta cuando hay exposición de superficie y cambios privilegiados.
 
 **MITRE ATT&CK Mapping:**
 - T1190 — Exploit Public-Facing Application
@@ -84,7 +84,7 @@ Aligned with DBIR theme: increased initial access via vulnerability exploitation
 **Risk Score:** 250 (Impact 5/5 × Likelihood 5/5)
 
 **Risk Rationale:**
-Very high impact due to business disruption and potential data loss/extortion; likelihood increases when EDR telemetry enables early behavioral signals.
+Impacto crítico por interrupción del negocio + extorsión; alta prevalencia en intrusiones.
 
 **MITRE ATT&CK Mapping:**
 - T1486 — Data Encrypted for Impact
@@ -117,7 +117,7 @@ Aligned with DBIR theme: ransomware prevalence in system intrusion patterns. Tel
 **Risk Score:** 250 (Impact 5/5 × Likelihood 5/5)
 
 **Risk Rationale:**
-High impact due to potential sensitive data leakage and regulatory exposure; likelihood increases when network/database telemetry enables correlation between export activity and outbound traffic.
+Alto impacto por fuga de datos y exposición regulatoria; probabilidad alta si hay señales de export + egress.
 
 **MITRE ATT&CK Mapping:**
 - T1041 — Exfiltration Over C2 Channel
@@ -146,12 +146,12 @@ Aligned with DBIR themes: credential abuse/insider + exfil outcomes. Telemetry c
 
 ### 5. Third-party access anomaly (vendor account deviates from normal patterns)
 
-**Risk Level:** Med
+**Risk Level:** Medium
 
 **Risk Score:** 160 (Impact 4/5 × Likelihood 4/5)
 
 **Risk Rationale:**
-Moderate-to-high impact depending on accessed systems; likelihood increases with identity visibility into vendor behavior and access patterns.
+Riesgo relevante por accesos de terceros; probabilidad media y depende de controles/visibilidad.
 
 **MITRE ATT&CK Mapping:**
 - T1199 — Trusted Relationship

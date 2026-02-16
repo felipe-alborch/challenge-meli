@@ -27,7 +27,6 @@ class AnalyzerAgent:
     """
 
     def __init__(self, project_root: Optional[Path] = None):
-        # app/agents/analyzer.py -> parents[2] == repo_root
         self.project_root = project_root or Path(__file__).resolve().parents[2]
         self.inputs_dir = self.project_root / "inputs"
         self.data_dir = self.project_root / "data"
@@ -191,15 +190,9 @@ class AnalyzerAgent:
         return tailored
 
 
-# --- Compatibility layer ---
-# Your scaffold likely calls analyzer.run(session_id, text).
-# We'll keep it to avoid breaking main/orchestrator.
 def run(session_id: str, text: str) -> Dict[str, Any]:
     agent = AnalyzerAgent()
-    # Si main.py te pasa un texto con el input, lo usamos.
-    # Si viene vacío/corto, caemos al archivo template_input.txt
     if text and len(text.strip()) > 50:
-        # guardamos temporalmente el input recibido
         tmp_path = agent.inputs_dir / "runtime_input.txt"
         tmp_path.write_text(text, encoding="utf-8")
         user_input_path = "runtime_input.txt"
