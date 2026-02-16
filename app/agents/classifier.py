@@ -1,29 +1,15 @@
 from __future__ import annotations
 
 from typing import Dict, Any, List
-
+from app.mcp.mitre_client import get_technique_by_id
 
 # --- MITRE mapping ---
-MITRE_MAP: Dict[str, List[Dict[str, str]]] = {
-    "ATO": [
-        {"technique": "T1078", "name": "Valid Accounts"},
-    ],
-    "EXPLOIT_PRIVESC": [
-        {"technique": "T1190", "name": "Exploit Public-Facing Application"},
-        {"technique": "T1068", "name": "Exploitation for Privilege Escalation"},
-    ],
-    "RANSOMWARE": [
-        {"technique": "T1486", "name": "Data Encrypted for Impact"},
-        {"technique": "T1490", "name": "Inhibit System Recovery"},
-    ],
-    "EXFIL": [
-        {"technique": "T1041", "name": "Exfiltration Over C2 Channel"},
-        {"technique": "T1567", "name": "Exfiltration Over Web Service"},
-    ],
-    "THIRD_PARTY": [
-        {"technique": "T1199", "name": "Trusted Relationship"},
-        {"technique": "T1078", "name": "Valid Accounts"},
-    ],
+MITRE_ID_MAP = {
+    "ATO": ["T1078"],
+    "EXPLOIT_PRIVESC": ["T1190", "T1068"],
+    "RANSOMWARE": ["T1486", "T1490"],
+    "EXFIL": ["T1041", "T1567"],
+    "THIRD_PARTY": ["T1199", "T1078"],
 }
 
 
@@ -100,8 +86,16 @@ def _score_from_category(category: str, telemetry: Dict[str, bool]) -> Dict[str,
     }
 
 
-def run(session_id: str, analyzer_out: Dict[str, Any]) -> Dict[str, Any]:
-    detectors = analyzer_out.get("detectors", [])
+def run(session_id: str, analyzer_out: Dict[str, Any]) -> Dict[str, Any]:    
+    # Soporta ambos formatos:
+    # - analyzer_out crudo: {"detectors": [...]}
+    # - analyzer_out envelope: {"payload": {"detectors": [...]}}
+    detectors = analyzer_out.get("detectors")
+    if detectors is None:
+        detectors = (analyzer_out.get("payload") or {}).get("detectors", [])
+    if detectors is None:
+        detectors = []
+
     classified: List[Dict[str, Any]] = []
 
     for d in detectors:
@@ -109,7 +103,24 @@ def run(session_id: str, analyzer_out: Dict[str, Any]) -> Dict[str, Any]:
         telemetry = d.get("telemetry_flags", {}) or {}
 
         scoring = _score_from_category(category, telemetry)
-        mitre = MITRE_MAP.get(category, [])
+
+        # MITRE lookup vía MCP (con fallback)
+        mitre: List[Dict[str, str]] = []
+        for tid in MITRE_ID_MAP.get(category, []):
+            info = get_technique_by_id(tid)
+
+            if not info:
+                mitre.append({"technique": tid, "name": "Unknown (MCP lookup failed)"})
+                continue
+
+            name = (
+                info.get("name")
+                or info.get("technique_name")
+                or info.get("title")
+                or "Unknown"
+            )
+
+            mitre.append({"technique": tid, "name": name})
 
         classified.append({
             "name": d.get("name"),
@@ -118,7 +129,7 @@ def run(session_id: str, analyzer_out: Dict[str, Any]) -> Dict[str, Any]:
             **scoring,
         })
 
-    # Order by FINAL risk_score
+    # Orden por risk_score final
     classified.sort(key=lambda x: x.get("risk_score", 0), reverse=True)
 
     return {

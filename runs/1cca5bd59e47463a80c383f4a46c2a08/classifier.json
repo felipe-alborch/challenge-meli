@@ -1,0 +1,102 @@
+{
+  "timestamp_utc": "2026-02-16T18:47:35.493709+00:00",
+  "session_id": "1cca5bd59e47463a80c383f4a46c2a08",
+  "agent": "classifier",
+  "payload": {
+    "message": "classifier ok",
+    "session_id_seen": "1cca5bd59e47463a80c383f4a46c2a08",
+    "classified_detectors": [
+      {
+        "name": "Suspicious sign-in chain (new geo/device + MFA fatigue + success)",
+        "category": "ATO",
+        "mitre": [
+          {
+            "technique": "T1078",
+            "name": "Valid Accounts"
+          }
+        ],
+        "impact": 5,
+        "likelihood": 5,
+        "risk_score": 250,
+        "risk_level": "High",
+        "risk_rationale": "High impact (account takeover enables broad access and can lead to escalation) and high likelihood given credential abuse prevalence; visibility improves with IdP telemetry."
+      },
+      {
+        "name": "Potential vulnerability exploitation leading to privileged session",
+        "category": "EXPLOIT_PRIVESC",
+        "mitre": [
+          {
+            "technique": "T1190",
+            "name": "Exploit Public-Facing Application"
+          },
+          {
+            "technique": "T1068",
+            "name": "Exploitation for Privilege Escalation"
+          }
+        ],
+        "impact": 5,
+        "likelihood": 5,
+        "risk_score": 250,
+        "risk_level": "High",
+        "risk_rationale": "High impact (privileged access can compromise the environment) and increasing likelihood as exploitation is a common initial access vector; cloud audit telemetry improves detection confidence."
+      },
+      {
+        "name": "Ransomware early behavior (mass file ops + recovery tampering)",
+        "category": "RANSOMWARE",
+        "mitre": [
+          {
+            "technique": "T1486",
+            "name": "Data Encrypted for Impact"
+          },
+          {
+            "technique": "T1490",
+            "name": "Inhibit System Recovery"
+          }
+        ],
+        "impact": 5,
+        "likelihood": 5,
+        "risk_score": 250,
+        "risk_level": "High",
+        "risk_rationale": "Very high impact due to business disruption and potential data loss/extortion; likelihood increases when EDR telemetry enables early behavioral signals."
+      },
+      {
+        "name": "Mass data export + unusual egress destination",
+        "category": "EXFIL",
+        "mitre": [
+          {
+            "technique": "T1041",
+            "name": "Exfiltration Over C2 Channel"
+          },
+          {
+            "technique": "T1567",
+            "name": "Exfiltration Over Web Service"
+          }
+        ],
+        "impact": 5,
+        "likelihood": 5,
+        "risk_score": 250,
+        "risk_level": "High",
+        "risk_rationale": "High impact due to potential sensitive data leakage and regulatory exposure; likelihood increases when network/database telemetry enables correlation between export activity and outbound traffic."
+      },
+      {
+        "name": "Third-party access anomaly (vendor account deviates from normal patterns)",
+        "category": "THIRD_PARTY",
+        "mitre": [
+          {
+            "technique": "T1199",
+            "name": "Trusted Relationship"
+          },
+          {
+            "technique": "T1078",
+            "name": "Valid Accounts"
+          }
+        ],
+        "impact": 4,
+        "likelihood": 4,
+        "risk_score": 160,
+        "risk_level": "Med",
+        "risk_rationale": "Moderate-to-high impact depending on accessed systems; likelihood increases with identity visibility into vendor behavior and access patterns."
+      }
+    ]
+  }
+}
